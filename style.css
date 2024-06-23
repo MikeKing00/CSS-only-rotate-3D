@@ -1,0 +1,155 @@
+
+body{
+    background-image: url(/Photo/background3.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+.banner{
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    /* ซ่อนสิ่งที่เกินขอบเบตของ Div */
+    overflow: hidden;
+    /* กำหนดค่า Div เป็นค่าสัมพันธ์ */
+    position: relative;
+}
+
+.banner .slider{
+    position: absolute;
+    width: 200px;
+    height: 250px;
+    top :10%;
+    /* ตำแหน่งถัดจากระยะขอบซ้าย 50% - 1/2 ของค่าความกว้าง 200px/2 = 100 px */
+    left: calc(50% - 100px);
+    /* แปลงค่าตัว slide ให้เป็นรูปแบบ 3D */
+    transform-style: preserve-3d;
+    /* เพิ่มระยะมาด้านหน้าจากจุด 0 ที่ x,y ขึ้นมาด้านหน้า 1000px แกน Z */
+    transform: perspective(1000px);
+    /* กำหนดค่า Animation เล่นอัตโนมัติ 20 วิ เล่นเรื่อยต่อเรื่อยๆ */
+    animation: autoRun 60s linear infinite;
+    z-index: 2;
+}
+
+@keyframes autoRun{
+    from{
+        transform: perspective(1000px) rotateX(-16deg) rotateY(0deg);
+    }to{
+        transform: perspective(1000px) rotateX(-16deg) rotateY(360deg);
+    }
+}
+
+/* 
+                                    (x)
+                                    I                                               *-สูตรการคำรวน 3D หมุน circle-*
+                                    I               (Z)                               DISTANCE of Each item
+                                    I               I                                 360 deg / quantity
+                                    I             I                                   360 /10(รูป) = 36deg
+                                    I           I
+                                    I         I                                      rotateY of item at position
+                                    I       I----550px-------------   
+                                    I     I                                          (position -1) * (360 deg / quantity)
+                                    I   I       
+                                    I I                                               
+                                    I-----------------------------> (y)                                                
+                                   I                 
+                                  I                 
+                                 I              
+                                I                  
+                               I------------- 550 px -------------               
+                              I            
+                             I                
+                            I                 
+                          I   
+                        (z)   1000px   
+                            
+*/
+
+.banner .slider .item{
+    /* แอตทริบิ้วตำแหน่งที่แน่นอน */
+    position: absolute;
+    /* ทำให้ตำแหน่ง อยู่ห่างจาก บน ซ้าย ล่าง ขวา ขนาดจะเท่ากันกับแถบเลื่อน */
+    inset: 0 0 0 0 ;
+    /* แต่ละ items เราจะย้ายออกมาทางแกน Z 550px */
+    transform:
+         /* เมื่อใช้การคำนวนทาง คณิตศาตร์ ใช้ Calc ตำแหน่ง - 1 * 360องศา / จำนาน item ( *1deg เพื่อแสดงค่าตำแหน่ง) */
+        rotateY(calc( (var(--position) - 1)*(360/ var(--quantity)) * 1deg))
+        translateZ(360px);
+}
+
+.banner .slider .item img{
+    width: 70%;
+    height: 70%;
+    /* กำหนดขนาดให้ cover กับ Div */
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+    box-shadow: 1px 1px 20px .5px #ffffff;
+}
+
+.banner .content{
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    /* ความกว้า 1400 px แต่ต้องไม่เกิน 100% ของความสูงหน้าจออุปกรณ์ */
+    width: min(1400px, 100vw);
+    height: max-content;
+    padding-bottom:30px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+}
+
+.banner .content h1{
+    font-size: 10em;
+    line-height: 1em;
+    color: rgb(95, 14, 0);
+    position:relative;
+}
+/* add data-content ที่ TAG HTML ในมาใส่ After ในcss เพื่อทำให้ข้อความทับกัน และทำ color transpatent */
+.banner .content h1::after{
+    position: absolute;
+    inset: 0 0 0 0;
+    content: attr(data-content);
+    z-index: 2;
+    -webkit-text-stroke: 2px #ffffff;
+    color: transparent;
+
+
+}
+
+.banner .content .author{
+    text-align: right;
+    max-width: 400px;
+    background: #ffffff33;
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    color: #ffffff;
+    margin: 0;
+    border: 1px solid white;
+}
+
+.banner .content h2{
+    font-size: 3em;
+}
+.banner .content p{
+    font-size: 1em;
+}
+
+.banner .content .model{
+    background-image: url(/Photo/MainBoy.png);
+    width: 100%;
+    height: 75vh;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-size: auto 130%;
+    background-repeat: no-repeat;
+    background-position: top center;
+    z-index: 1;
+}
